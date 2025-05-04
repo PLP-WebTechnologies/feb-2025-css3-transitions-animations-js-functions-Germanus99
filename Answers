@@ -1,0 +1,128 @@
+1. HTML Structure 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS & JS Animations & Preferences</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Welcome!</h1>
+  <button id="animateBtn">Click Me</button>
+
+  <div>
+    <label for="bgColorPicker">Choose Background Color:</label>
+    <input type="color" id="bgColorPicker">
+  </div>
+
+  <div>
+    <label for="fontSizeSlider">Font Size:</label>
+    <input type="range" id="fontSizeSlider" min="12" max="36" value="16">
+    <span id="fontSizeValue">16px</span>
+  </div>
+
+  <div>
+    <label for="darkModeToggle">Enable Dark Mode:</label>
+    <input type="checkbox" id="darkModeToggle">
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+ 2. CSS codes
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+  margin-top: 50px;
+  transition: background-color 0.5s ease, color 0.5s ease, font-size 0.3s ease;
+  background-color: white;
+  color: black;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+button.animate {
+  transform: scale(1.2) rotate(10deg);
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color: #333;
+  color: white;
+}
+
+
+3. JavaScript part
+
+const button = document.getElementById('animateBtn');
+const colorPicker = document.getElementById('bgColorPicker');
+const fontSizeSlider = document.getElementById('fontSizeSlider');
+const fontSizeValue = document.getElementById('fontSizeValue');
+const darkModeToggle = document.getElementById('darkModeToggle');
+
+// Load preferences from localStorage
+const savedColor = localStorage.getItem('bgColor');
+const savedFontSize = localStorage.getItem('fontSize');
+const savedDarkMode = localStorage.getItem('darkMode');
+
+if (savedColor) {
+  document.body.style.backgroundColor = savedColor;
+  colorPicker.value = savedColor;
+}
+
+if (savedFontSize) {
+  document.body.style.fontSize = savedFontSize + 'px';
+  fontSizeSlider.value = savedFontSize;
+  fontSizeValue.textContent = savedFontSize + 'px';
+}
+
+if (savedDarkMode === 'true') {
+  document.body.classList.add('dark-mode');
+  darkModeToggle.checked = true;
+}
+
+// Event listener for background color change
+colorPicker.addEventListener('input', function () {
+  const color = this.value;
+  document.body.style.backgroundColor = color;
+  localStorage.setItem('bgColor', color);
+});
+
+// Event listener for font size change
+fontSizeSlider.addEventListener('input', function () {
+  const fontSize = this.value;
+  document.body.style.fontSize = fontSize + 'px';
+  fontSizeValue.textContent = fontSize + 'px';
+  localStorage.setItem('fontSize', fontSize);
+});
+
+// Event listener for dark mode toggle
+darkModeToggle.addEventListener('change', function () {
+  if (this.checked) {
+    document.body.classList.add('dark-mode');
+    localStorage.setItem('darkMode', 'true');
+  } else {
+    document.body.classList.remove('dark-mode');
+    localStorage.setItem('darkMode', 'false');
+  }
+});
+
+// Trigger animation on button click
+button.addEventListener('click', function () {
+  button.classList.add('animate');
+  setTimeout(() => {
+    button.classList.remove('animate');
+  }, 300);
+});
+
+
